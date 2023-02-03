@@ -5,7 +5,65 @@ A Handbook Of Agile Software Craftmanship
 > 
 > Markdown ini berisi summary dari yg telah saya baca. Tidak semuanya saya tulis di sini. Jadi, tetap pertimbangkan untuk membaca langsung bukunya.
 
+# Daftar Isi
+- [Clean Code](#clean-code)
+- [Daftar Isi](#daftar-isi)
+- [Penamaan](#penamaan)
+  - [Berikan nama yang sesuai/berarti](#berikan-nama-yang-sesuaiberarti)
+  - [Hindari Disinformasi](#hindari-disinformasi)
+  - [Berikan Pembeda yang Jelas](#berikan-pembeda-yang-jelas)
+  - [Gunakan Nama yang Mudah Diucap](#gunakan-nama-yang-mudah-diucap)
+  - [Gunakan Nama yang mudah Dicari](#gunakan-nama-yang-mudah-dicari)
+  - [Hindari Encoding](#hindari-encoding)
+  - [Member Prefix](#member-prefix)
+  - [Interface dan Implementasinya](#interface-dan-implementasinya)
+  - [Class Name dan Method Name](#class-name-dan-method-name)
+  - [Gunakan 1 Kata per Konsep](#gunakan-1-kata-per-konsep)
+  - [Jangan gunakan kata yang Ambigu](#jangan-gunakan-kata-yang-ambigu)
+  - [Use Solution Domain Names](#use-solution-domain-names)
+  - [Use Problem Domain Names](#use-problem-domain-names)
+  - [Berikan Konteks yg Jelas](#berikan-konteks-yg-jelas)
+  - [Hati-hati dalam Memberikan Konteks](#hati-hati-dalam-memberikan-konteks)
+- [Functions](#functions)
+  - [Kecil](#kecil)
+  - [Block dan Indentasi](#block-dan-indentasi)
+  - [Cuma melakukan 1 Kerjaan](#cuma-melakukan-1-kerjaan)
+  - [Satu Level Abstraksi](#satu-level-abstraksi)
+  - [Gunakan Top-Down Narative.](#gunakan-top-down-narative)
+  - [`Switch` statement](#switch-statement)
+  - [Nama yang Deskriptif](#nama-yang-deskriptif)
+  - [Function arguments / Parameter](#function-arguments--parameter)
+  - [Output Argument / Parameter](#output-argument--parameter)
+  - [Flag argument](#flag-argument)
+  - [Tidak punya side effect](#tidak-punya-side-effect)
+  - [Error Handling adalah 1 kerjaan](#error-handling-adalah-1-kerjaan)
+  - [DRY (Dont Repeat Yourself)](#dry-dont-repeat-yourself)
+  - [Structured Programming](#structured-programming)
+  - [Jadi, gimana sih nulis fungsi yg bener itu?](#jadi-gimana-sih-nulis-fungsi-yg-bener-itu)
+- [Comments](#comments)
+  - [Mindset soal *Comment*](#mindset-soal-comment)
+  - [Comment Bukan Untuk kodingan yang Buruk (Bad Code)](#comment-bukan-untuk-kodingan-yang-buruk-bad-code)
+  - [Komentar yang Diperbolehkan/baik](#komentar-yang-diperbolehkanbaik)
+    - [Copyright / Terkait Legalisasi](#copyright--terkait-legalisasi)
+    - [Komentar yang Informatif](#komentar-yang-informatif)
+    - [Komentar yang Menjelaskan Tujuan](#komentar-yang-menjelaskan-tujuan)
+    - [Komentar yang Mengklarifikasi Sesuatu](#komentar-yang-mengklarifikasi-sesuatu)
+    - [Peringatan / Menjelaskan Konsekuensi](#peringatan--menjelaskan-konsekuensi)
+    - [TODO comments](#todo-comments)
+  - [Komentar yang Buruk](#komentar-yang-buruk)
+    - [Tidak jelas](#tidak-jelas)
+    - [Redundan](#redundan)
+    - [*Comment* yang misleading](#comment-yang-misleading)
+    - [Journal comment](#journal-comment)
+    - [Komentar yang Tidak Perlu (Noise Comment)](#komentar-yang-tidak-perlu-noise-comment)
+    - [Komentar di kurung tutup](#komentar-di-kurung-tutup)
+    - [Komentar `Created by`](#komentar-created-by)
+    - [Kode yang dikomentar](#kode-yang-dikomentar)
+    - [Komentar bentuk HTML](#komentar-bentuk-html)
+    - [Komentar yang non-local.](#komentar-yang-non-local)
+    - [Informasi yang terlalu banyak](#informasi-yang-terlalu-banyak)
 # Penamaan
+Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
 Gunakan nama sesuai tujuannya. Contoh: daripada memberikan nama `int d`, lebih baik gunakan nama `int counter`.
 ## Hindari Disinformasi
@@ -73,8 +131,10 @@ string username
 > ```
 
 ## Member Prefix
-
+Cant understand this. :(
 ## Interface dan Implementasinya
+mungkin ini hanya relate pada bahasa `Java` saja.
+
 Biasanya kita mungkin akan menamai interface dengan nama, contoh `IConfiguration` dan `Configuration`. Akan lebih baik jika bernama tetap `Configuration` dan implementasinya dinamai `ConfigurationImplementation`.
 
 ## Class Name dan Method Name
@@ -85,14 +145,15 @@ Gunakan kata kerja untuk Nama Method.
 ## Gunakan 1 Kata per Konsep
 Misal, untuk mengambil data dalam bentuk pagination, gunakan 1 kata saja, misal `Get`. Jangan ada frasa lain seperti `Fetch`, `Retrive`, dll.
 
-Ketika ada logic lain, misal mengambil data tanpa pagination, kita bisa gunakan frasa lain (atau kata lain. Lihat *Jangan gunakan kata yang Ambigu*).
+Ketika ada logic lain, misal mengambil data tanpa pagination, kita bisa gunakan frasa lain (atau kata lain. Lihat [*Jangan gunakan kata yang Ambigu*](#jangan-gunakan-kata-yang-ambigu)).
 
 ## Jangan gunakan kata yang Ambigu
 Jika ngikut aturan 1 Kata per Konsep di atas, kita akan banyak menemukan kata yang sama seperti `Add...`. Usahakan berikan nama function yang tidak ambigu. Misal, `Add...` untuk menambahkan value ke objek, `Insert...` untuk menambahkan data ke DB.
 
 ## Use Solution Domain Names
+Cant understand this. :(
 ## Use Problem Domain Names
-
+Cant understand this. :(
 ## Berikan Konteks yg Jelas
 variable `name, address, city` dalam function `InsertUserAddress` mungkin sudah jelas. Tapi bagaimana jika variable `city` sendirian di function `sendPackage`?
 
@@ -102,11 +163,12 @@ Lebih baik gunakan nama seperti `destinationCity`.
 Misal kita kerja di perusahaan `XYZ`. Jangan menamai variable kita dengan `XYZusername`, `XYZConfiguration`, dll. Selain tidak informatif, ini juga memberikan prefix yang tidak perlu.
 
 # Functions
+Function atau fungsi bertujuan untuk memudahkan programmer dalam membaca kodenya, bukan malah mempersulitnya.
 
 ## Kecil
-Function harus kecil. Bagaimana menentukan apakah function itu kecil? Lanjut ke pembahasan berikutnya
+Function harus kecil. Bagaimana menentukan apakah function itu kecil? Lanjut ke pembahasan berikutnya.
 
-### Block dan Indentasi
+## Block dan Indentasi
 Hindari nested-block/indentation. Penggunaan nested-block atau nested-indentation menandakan bahwa function kita masih belum cukup kecil.
 
 ## Cuma melakukan 1 Kerjaan
@@ -405,7 +467,7 @@ Kode yang dikomentari saat ini bisa menjadi masalah. Orang lain tidak akan beran
 Lebih baik, jika kode sudah tidak digunakan, hapus. Jika dibutuhkan kembali, lihat di git/tool untuk versioning lainnya.
 
 ### Komentar bentuk HTML
-
+Komentar dalam bentuk HTML itu sulit dibaca.
 ### Komentar yang non-local.
 Komentar yang mengandung informasi global, tapi digunakan hanya pada 1 baris code saja.
 Contoh:
