@@ -62,6 +62,14 @@ A Handbook Of Agile Software Craftmanship
     - [Komentar bentuk HTML](#komentar-bentuk-html)
     - [Komentar yang non-local.](#komentar-yang-non-local)
     - [Informasi yang terlalu banyak](#informasi-yang-terlalu-banyak)
+- [Formatting](#formatting)
+  - [Tujuan dari Formatting](#tujuan-dari-formatting)
+  - [Vertical Formatting](#vertical-formatting)
+    - [File size](#file-size)
+    - [Metafora Surat Kabar](#metafora-surat-kabar)
+    - [Jarak 1 Line Tiap Konsep](#jarak-1-line-tiap-konsep)
+    - [Vertical Density](#vertical-density)
+    - [Jarak Vertikal](#jarak-vertikal)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -487,3 +495,97 @@ Dan, tentu kode seperti ini tidak baik. Tidak ada yang bisa menjamin apakah sela
 ### Informasi yang terlalu banyak
 Cukup tuliskan informasi yang perlu diketahui oleh pembaca kode kita.
 Komentar yang terlalu panjang pada fungsi kita juga bisa jadi tanda bahwa fungsi kita telah melakukan lebih dari 1 hal, dan itu perlu dibenahi.
+
+# Formatting
+Formatting di sini maksudnya adalah membuat kesan kode kita dapat dibaca dan dipahami oleh orang.
+
+## Tujuan dari Formatting
+Tujuan dari formatting adalah memudahkan komunikasi antar programmer, karena baik dalam komunikasi adalah ciri seorang programmer profesional.
+
+Kode yang baik akan menjadi teladan untuk programmer lain, untuk mematuhi style dan penulisan kode. 
+
+mungkin kode kita tidak akan bertahan dan akan berubah, tapi disiplin dan style kita dalam menulis kode yang baik akan tetap bertahan.
+
+## Vertical Formatting
+### File size
+File size di sini maksudnya adalah berapa panjang kode yang perlu kita tulis dalam 1 file.
+
+Tidak ada batasan khusus di sini. Tapi, penulis mengambil contoh beberapa library java. Dari situ, ditemukan bahwa dengan rata-rata 200 baris kode dalam 1 file, dengan batas maksimal 500 baris dalam 1 file, kita sudah bisa membuat sebuah sistem yang baik.
+
+### Metafora Surat Kabar
+Jika kita membaca surat kabar, berita-berita yang dituliskan biasanya runtut. Dari judul yang menjelaskan garis besar kejadian, rangkuman kejadian di paragraf-paragraf awal, hingga detail-detail dari kejadian tersebut di akhir.
+
+Hal ini juga bisa diterapkan dalam kodingan kita. Berikan nama fungsi yang merangkum seluruh proses. Pastikan level atas memberikan gambaran umum tentang fungsi kita. Lalu, semakin ke bawah, kita berikan detail dari fungsi kita.
+
+Contoh:
+```Go
+// ini fungsi high-level
+// memberikan gambaran umum
+func getUser(userId int) (user User) {
+    user := getUserFromRedis(userId)
+    if user != nil {
+        return user
+    }
+
+    user := getUserFromDB(userId)
+    return user
+}
+
+// ini fungsi yang lebih mendetail dari fungsi di atas.
+func getUserFromRedis(userId int) {}
+func getUserFromDB(userId int) {}
+```
+
+### Jarak 1 Line Tiap Konsep
+Jika terdapat beberapa konsep dalam 1 fungsi, kita bisa memberinya jarak sebagai penanda bahwa suatu konsep sudah selesai dan konsep baru akan dimulai.
+
+Contohnya pada fungsi `getUser()` di atas, ada jarak 1 baris antara `getUserFromRedis` dan `getUserFromDB`.
+
+Hal ini akan memudahkan kita memberi batasan berpikir. Ketika sudah masuk pada bagian `getUserFromDB`, kita tidak perlu lagi memikirkan soal mengambil data dari redis lagi.
+
+### Vertical Density
+Pastikan kode tertulis rapat. Jangan ada komentar yang justru membuat jarak antar baris kode semakin jauh dan menjadi sulit dipahami (karena harus scroll atas-bawah terus).
+
+### Jarak Vertikal
+1. **Variable Declaration**
+   
+   Penulisan Variable harus dekat dengan penggunaannya.
+   Jika fungsi kita cukup kecil, harusnya ini bukan masalah.
+
+2. **Instansiasi Objek**
+   Tidak ada aturan khusus, tapi biasanya ditulis di awal fungsi (atau awal class pada Java)
+
+3. **Fungsi Dependensi**
+   Fungsi dependensi ditulis dibawah fungsi yang memanggilnya dan dituliskan berurutan sesuai bagaimana fungsi pemanggilnya melakukan pemanggilan fungsi dependensi. Contoh:
+
+   ```Go
+   func mainFunction() {
+       // dipanggil dari 1 ke 2
+       func1()
+       func2()
+   }
+
+   // ditulis urut sesuai pemanggilannya di mainFunction()
+   func func1() {}
+   func func2() {}
+   ```
+
+   Jangan seperti dibawah:
+   ```Go
+   func func2() {}
+
+   func mainFunction() {
+       func1()
+       func2()
+   }
+
+   func func1() {}
+   ```
+
+4. **Kesamaan Konsep**
+   Fungsi yang memiliki kesamaan konsep, dinamai dengan nama yang mirip dan diletakkan saling berdekatan. Contoh:
+   ```Go
+   // sama-sama menghitung bagian dari barang (harga dan diskon)
+   func CalculateTotalPrice(items []Item) {}
+   func CalculateTotalDiscount(discountedItems []items) {}
+   ```
