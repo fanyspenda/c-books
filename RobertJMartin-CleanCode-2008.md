@@ -70,6 +70,15 @@ A Handbook Of Agile Software Craftmanship
     - [Jarak 1 Line Tiap Konsep](#jarak-1-line-tiap-konsep)
     - [Vertical Density](#vertical-density)
     - [Jarak Vertikal](#jarak-vertikal)
+  - [Horizontal Formatting](#horizontal-formatting)
+    - [Panjang Line](#panjang-line)
+    - [Horizontal Alignment](#horizontal-alignment)
+    - [Indentasi](#indentasi)
+  - [Aturan Tim](#aturan-tim)
+- [Object Dan Data Structure](#object-dan-data-structure)
+  - [Data Abstraction](#data-abstraction)
+  - [Data/Object Anti-Symmetry](#dataobject-anti-symmetry)
+  - [The Law of Demeter](#the-law-of-demeter)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -589,3 +598,78 @@ Pastikan kode tertulis rapat. Jangan ada komentar yang justru membuat jarak anta
    func CalculateTotalPrice(items []Item) {}
    func CalculateTotalDiscount(discountedItems []items) {}
    ```
+
+## Horizontal Formatting
+### Panjang Line
+Panjang line max 120 karakter
+
+### Horizontal Alignment
+Penulis buku ini berpendapat bahwa indentasi pada variable itu tidak perlu. Contoh:
+```Go
+var firstName string = "John"
+var lastName  string = "Doe"
+var age       int    = 27
+```
+
+Yang terpenting adalah jumlah variable yang dideklarasikan tidak terlalu banyak, sehingga baris tidak memanjang ke bawah.
+
+
+### Indentasi
+Indentasi sesuai dengan tanda kurung. Misal:
+```Go
+func PrintMessage() {
+    print()
+}
+```
+jangen seperti di bawah ini:
+```Go
+func PrintMessage() { print() }
+```
+
+## Aturan Tim
+Setiap orang mempunyai style koding sendiri. Contoh, Ada yang menggunakan `a = a + 1`, ada yang `a += 1`, dll.
+
+Jika kerja dalam sebuah tim, buat aturan tim untuk masalah formatting dan style dari kode. Agar tidak ada style kode yang berbeda-beda, sehingga membuat kode kita tidak konsisten.
+
+# Object Dan Data Structure
+> Objects menyembunyikan data dan mengekspos function yang mengoperasikan data tersebut.
+
+> Data structure mengekspos data mereka dan tidak memiliki function.
+
+Dari kata di atas, kita bisa simpulkan bahwa ***Objek*** itu:
+1. Tidak boleh mempunyai variable public
+2. Pengaksesan/pemrosesan variable dalam objek dilakukan melalui method yang dia punya
+
+Sedangkan ***Data Structure*** berarti:
+1. Memiliki variable yang bersifat publik
+2. Tidak memiliki method.
+## Data Abstraction
+Abstraksi artinya kita tidak perlu membuat seseorang mengetahui detail dari sebuah kode secara langsung.
+
+Tujuan dari abstraksi membuat kode kita menjadi mudah dimengerti dan menyembunyikan kerumitan kode kita. Contoh:
+
+Berikut adalah contoh yang baik dalam membuat interface Persegi Panjang:
+```Go
+type Rectangle interface {
+    getArea()
+    getCircumference()
+}
+```
+Contoh yang kurang baik seperti ini:
+```Go
+type Rectangle interface {
+    // Kedua function ini bisa dijadikan objek yang bisa diakses saja,
+    // daripada menggunakan method untuk mengaksesnya.
+
+    // Lalu, tidak adanya `getArea()` dan `getCircumference()` menandakan
+    // bahwa kita harus menghitung luas dan keliling sendiri.
+    // Ini berarti tidak menyembunyikan keabstrakan kode kita.
+    getLength()
+    getWidth()
+}
+```
+## Data/Object Anti-Symmetry
+Cant Understand this :(
+
+## The Law of Demeter
+Cant Understand this :(
