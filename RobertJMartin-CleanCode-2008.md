@@ -79,6 +79,13 @@ A Handbook Of Agile Software Craftmanship
   - [Data Abstraction](#data-abstraction)
   - [Data/Object Anti-Symmetry](#dataobject-anti-symmetry)
   - [The Law of Demeter](#the-law-of-demeter)
+  - [Data Transfer Object](#data-transfer-object)
+    - [Active Record](#active-record)
+- [Error Handling](#error-handling)
+  - [Gunakan `Exception` daripada Return Error](#gunakan-exception-daripada-return-error)
+  - [Selalu Mulai Dengan `Try-Catch-Finally`](#selalu-mulai-dengan-try-catch-finally)
+  - [Berikan Context dalam `Exception`](#berikan-context-dalam-exception)
+  - [Wrap Error](#wrap-error)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -673,3 +680,51 @@ Cant Understand this :(
 
 ## The Law of Demeter
 Cant Understand this :(
+
+## Data Transfer Object
+Bisa dibilang nama lain dari Data Structure (class dengan dengan variable public, tanpa fungsi).
+
+DTO bisa ditulis dengan benar-benar memberikan akses public pada variabel, atau membuat variable private, tapi memiliki *setter* dan *getter*. Selain itu, tidak ada method lagi.
+
+### Active Record
+Active Record di sini berarti data structure yang memiliki method *Save()* dan *Find()* (bukan berarti method yang mengurusi bagian bisnis juga ditaruh di sini ya..).
+
+# Error Handling
+
+Error handling yang baik adalah error handling yang tidak membuat logic dalam kode menjadi samar.
+
+## Gunakan `Exception` daripada Return Error
+Sudah cukup jelas. Penggunaan Exception akan lebih membuat kode rapi daripada mereturn satu-per-satu error.
+
+## Selalu Mulai Dengan `Try-Catch-Finally`
+Dengan memulai menulis Try-Catch dan Finally, kita bisa dengan mudah menuliskan program dan error handling dengan runtut.
+
+## Berikan Context dalam `Exception`
+Context di sini bertujuan agar kita mendapat informasi dari error tersebut. Seperti dari mana error berasal, apa penyebabnya, dll.
+
+## Wrap Error
+Gabungkan error daripada menghandle satu-per-satu. Contoh:
+```Go
+func InsertItem(a item) {
+    err := insertToDB(a)
+    if err != nil {
+        switch (err) {
+            case errExec:
+            // do something
+            case errConnection:
+            // do something
+        }
+    }
+
+    return
+}
+```
+
+lebih baik jika:
+```Go
+func InsertItem(a item) {
+    err := insertToDB(a)
+    handleError(err)
+    return
+}
+```
