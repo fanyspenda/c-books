@@ -86,6 +86,8 @@ A Handbook Of Agile Software Craftmanship
   - [Selalu Mulai Dengan `Try-Catch-Finally`](#selalu-mulai-dengan-try-catch-finally)
   - [Berikan Context dalam `Exception`](#berikan-context-dalam-exception)
   - [Wrap Error](#wrap-error)
+  - [Definisikan Normal Flow](#definisikan-normal-flow)
+  - [Jangan Mereturn `Null`](#jangan-mereturn-null)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -728,3 +730,13 @@ func InsertItem(a item) {
     return
 }
 ```
+
+## Definisikan Normal Flow
+Kadang ada beberapa case khusus yang menghasilkan error, namun tidak perlu dihandle. 
+
+Jadi, buat case khusus dalam function/class terpisah.
+
+## Jangan Mereturn `Null`
+Hindari return function dengan value yang nullable. Hal ini membuat kita harus melakukan pengecekan apakah hasil function tersebut mereturn null atau tidak.
+
+Pertimbangkan untuk menggunakan empty object/zero-value.
