@@ -88,6 +88,9 @@ A Handbook Of Agile Software Craftmanship
   - [Wrap Error](#wrap-error)
   - [Definisikan Normal Flow](#definisikan-normal-flow)
   - [Jangan Mereturn `Null`](#jangan-mereturn-null)
+  - [Jangan Passing `Null`](#jangan-passing-null)
+- [Boundaries (Batasan)](#boundaries-batasan)
+  - [Third-Party App/Library](#third-party-applibrary)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -732,7 +735,7 @@ func InsertItem(a item) {
 ```
 
 ## Definisikan Normal Flow
-Kadang ada beberapa case khusus yang menghasilkan error, namun tidak perlu dihandle. 
+Kadang ada beberapa case khusus yang menghasilkan error, namun tidak perlu dihandle.
 
 Jadi, buat case khusus dalam function/class terpisah.
 
@@ -740,3 +743,14 @@ Jadi, buat case khusus dalam function/class terpisah.
 Hindari return function dengan value yang nullable. Hal ini membuat kita harus melakukan pengecekan apakah hasil function tersebut mereturn null atau tidak.
 
 Pertimbangkan untuk menggunakan empty object/zero-value.
+
+## Jangan Passing `Null`
+Passing null ke function sebagai parameter lebih buruk dari mereturn null.
+Hindari penggunaan ini.
+
+# Boundaries (Batasan)
+
+## Third-Party App/Library
+Penggunaan library pihak ketiga sudah cukup lumrah dalam pengembangan software. Tapi, kadang library tersebut mengandung function yang memiliki banyak fitur secara umum, namun tak sesuai dengan segi bisnis aplikasi kita.
+
+Oleh karena itu, buat function/class tersendiri yang membungkus proses aplikasi pihak ketiga tersebut agar sesuai dengan segi bisnis kita.
