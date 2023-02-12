@@ -91,6 +91,7 @@ A Handbook Of Agile Software Craftmanship
   - [Jangan Passing `Null`](#jangan-passing-null)
 - [Boundaries (Batasan)](#boundaries-batasan)
   - [Third-Party App/Library](#third-party-applibrary)
+  - [Mempelajari dan Explore App Pihak Ketiga](#mempelajari-dan-explore-app-pihak-ketiga)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -754,3 +755,18 @@ Hindari penggunaan ini.
 Penggunaan library pihak ketiga sudah cukup lumrah dalam pengembangan software. Tapi, kadang library tersebut mengandung function yang memiliki banyak fitur secara umum, namun tak sesuai dengan segi bisnis aplikasi kita.
 
 Oleh karena itu, buat function/class tersendiri yang membungkus proses aplikasi pihak ketiga tersebut agar sesuai dengan segi bisnis kita.
+
+## Mempelajari dan Explore App Pihak Ketiga
+Dalam menggunakan aplikasi/libary pihak ketiga, tentu kita perlu mempelajari library tersebut. Mempelajari hal itu tidak mudah, mengimplementasikannya juga tidak mudah. Mempelajari dan mengimplementasikannya adalah hal yang *double* tidak mudahnya.
+
+Nah, daripada kita mempelajari app pihak ketiga tersebut di code production kita, lebih baik kita membuat code untuk mencoba library tersebut terlebih dahulu dan membuat testnya. Hal ini disebut dengan *learning test*.
+
+learning test memiliki beberapa manfaat diantaranya:
+1. Kita bisa memahami library yang dipakai tanpa merusak code yang sudah di production.
+2. Jika ada update terkait library tersebut, kita bisa menjalankan testnya untuk memastikan apakah library tersebut memiliki perubahan *behaviour*. Contoh: Fungsi yang biasanya mereturn integer, di versi terbarunya mereturn string.
+
+> **Note:**
+>
+> Usahakan aplikasi kita tidak terlalu banyak bergantung pada library/aplikasi pihak ketiga. Karena, aplikasi pihak ketiga adalah hal yang diluar kendali kita. Lebih buruknya, bisa jadi kita yang dikendalikan oleh aplikasi pihak ketiga.
+>
+> Kita bisa saja melakukan maintenance di code kita sendiri kapanpun, tapi tidak dengan aplikasi pihak ketiga.
