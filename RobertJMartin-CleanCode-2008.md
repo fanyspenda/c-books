@@ -92,6 +92,11 @@ A Handbook Of Agile Software Craftmanship
 - [Boundaries (Batasan)](#boundaries-batasan)
   - [Third-Party App/Library](#third-party-applibrary)
   - [Mempelajari dan Explore App Pihak Ketiga](#mempelajari-dan-explore-app-pihak-ketiga)
+- [Unit Tests](#unit-tests)
+  - [TDD (Test-Driven Development)](#tdd-test-driven-development)
+  - [Test yang membuat kodemu flexible](#test-yang-membuat-kodemu-flexible)
+  - [Lebih sedikit `assert` yang perlu di test itu lebih baik](#lebih-sedikit-assert-yang-perlu-di-test-itu-lebih-baik)
+  - [1 Konsep per Test](#1-konsep-per-test)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -770,3 +775,33 @@ learning test memiliki beberapa manfaat diantaranya:
 > Usahakan aplikasi kita tidak terlalu banyak bergantung pada library/aplikasi pihak ketiga. Karena, aplikasi pihak ketiga adalah hal yang diluar kendali kita. Lebih buruknya, bisa jadi kita yang dikendalikan oleh aplikasi pihak ketiga.
 >
 > Kita bisa saja melakukan maintenance di code kita sendiri kapanpun, tapi tidak dengan aplikasi pihak ketiga.
+
+
+# Unit Tests
+## TDD (Test-Driven Development)
+Banyak orang mengira bahwa TDD adalah menulis unit test terlebih dahulu sebelum menulis code kita. Namun, sebenarnya hal itu hanya bagian kecil dari TDD.
+
+Berikut 3 hukum TDD:
+
+1. Jangan menulis kode sampai kita membuat unit test yang gagal.
+2. Jangan menulis unit test lebih dari cukup untuk case yang gagal, dan tidak bisa dicompile itu termasuk gagal. (Kalo unit test yang ditulis udh bisa gagal, yaudah, stop)
+3. Jangan menulis kode lebih dari cukup untuk lolos dari unit test. (kalo code yang kita tulis sudah lolos unit test, bikin test case baru)
+
+Membuat unit test itu sama pentingnya dengan menulis kodenya. Harus bersih sebersih code projectnya.
+
+Unit test yang tidak bersih akan menjadi kendala ketika ada perubahan. Unit test akan semakin sulit dibaca dan membuat pengembangan aplikasi terhambat. Karena terhambat, tim manajerial akhirnya memutuskan untuk menghapus seluruh unit test. Akhirnya, bug bermunculan ketika terjadi perubahan.
+
+Semakin banyak bugs, akhirnya developer semakin takut untuk mengubah kode yang sudah di production.
+
+Unit test yang buruk itu setara, atau bahkan lebih buruk daripada tidak ada unit test sama sekali. Perlakukan unit test seperti kita memperlakukan kode project kita.
+
+## Test yang membuat kodemu flexible
+Dengan adanya unit test, kode kita menjadi flexible karena kita bisa membuat perubahan apapun selama unit test kita tetap berjalan.
+
+Kita bisa mengimprove design dan arsitektur project kita tanpa takut merusak flow bisnis saat ini, karena hal itu telah dijaga oleh unit test yang baik.
+
+## Lebih sedikit `assert` yang perlu di test itu lebih baik
+Dengan lebih sedikitnya assert yang kita buat, artinya fungsi unit test kita bisa lebih fokus pada 1 assert. Tapi, bukan berarti banyak `assert` itu buruk. 
+
+## 1 Konsep per Test
+Buat setiap test menjadi hanya 1 konsep per test.
