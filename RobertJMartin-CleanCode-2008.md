@@ -97,6 +97,10 @@ A Handbook Of Agile Software Craftmanship
   - [Test yang membuat kodemu flexible](#test-yang-membuat-kodemu-flexible)
   - [Lebih sedikit `assert` yang perlu di test itu lebih baik](#lebih-sedikit-assert-yang-perlu-di-test-itu-lebih-baik)
   - [1 Konsep per Test](#1-konsep-per-test)
+  - [FIRST](#first)
+- [Classes](#classes)
+  - [Kecil](#kecil-1)
+  - [Single Responsibility Principle](#single-responsibility-principle)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -805,3 +809,61 @@ Dengan lebih sedikitnya assert yang kita buat, artinya fungsi unit test kita bis
 
 ## 1 Konsep per Test
 Buat setiap test menjadi hanya 1 konsep per test.
+
+## FIRST
+Testing harus memenuhi kriteria *FIRST* ini, yaitu:
+
+1. **Fast:** Testing haruslah cepat. Jika tidak, kita akan malas menjalankan test secara berkala. Jika kita malas, maka testing akan menjadi tidak relevan. Ketika ada error, kita jadi kesulitan untuk membenahinya.
+
+2. **Independent:** Testing haruslah independen (1 test tidak menjadi dependensi ke test lainnya).
+
+3. **Repeatable:** Testing haruslah bisa dijalankan dalam berbagai environment. Baik dalam keadaan ada internet, maupun tidak. Baik di dev, ataupun di production.
+
+4. **Self-Validating:** Testing harus bisa mengoreksi diri mereka sendiri (apakah testing ini berhasil/gagal). Kita tidak boleh menganalisa sendiri hasil dari testing. Biarkan program yang melakukannya untuk kita.
+
+5. **Timely:** Testing harus ditulis sebelum kita menulis kode. Jika tidak. Jika tidak, tanpa kita sadari kita bisa jadi membuat kode yang tidak testable, sehingga kode kita menjadi sulit ditest.
+
+# Classes
+Di sini kita akan membahas bagaimana kelas (atau mungkin struct jika di golang) seharusnya ditulis.
+
+## Kecil
+Class haruslah kecil. Kelas tidak boleh memiliki jumlah properti yang besar. setiap properti merupakan *responsibility* (tanggungjawab) dari kelas itu.
+
+Bayangkan sebuah kelas/struct dengan 70 field.
+```Go
+type superDashboard struct {
+    menuName string
+    activeMenu string
+    userMenu string
+    userMenuName string
+    userMenuList string
+    userMenuDetail string
+    ...
+    adminMenu string
+    adminMenuName string
+    adminMenuList string
+    ...
+}
+```
+
+Bagaimana kalau kita coba jadikan struct di atas seperti ini:
+```Go
+type superDashboard struct {
+    GetUserMenu func() UserMenu
+    GetAdminMenu func() AdminMenu
+    ...
+}
+```
+
+Apakah ini sudah kecil? **Bisa jadi *belum***.
+
+Kelas diatas memang sudah berbentuk kecil, tapi dia masih memiliki banyak *responsibilities* seperti mengambil menu user, mengambil menu admin, dll.
+
+Cobalah mendeskripsikan kelas yang akan kita buat tanpa menggunakan kata *Dan*, *Jika*, *Atau*, *Tapi*.
+
+Coba kita deskripsikan superdashboard:
+> SuperDasboard adalah kelas yang digunakan untuk mengambil data dari untuk keperluan menu user ***dan*** keperluan menu admin.
+
+nah, kita bisa tahu bahwa ada kata *"dan"* di atas. Dengan begitu, kita bisa menyimpulkan bahwa superDashboard memiliki responsibility lebih dari satu, yang mana ini melanggar konsep ***Single Responsibility Principle*** (akan dibahas di bawah).
+
+## Single Responsibility Principle
