@@ -101,6 +101,9 @@ A Handbook Of Agile Software Craftmanship
 - [Classes](#classes)
   - [Kecil](#kecil-1)
   - [Single Responsibility Principle](#single-responsibility-principle)
+  - [Kohesi](#kohesi)
+  - [Mengorganisir Perubahan](#mengorganisir-perubahan)
+    - [Isolasi terhadap perubahan](#isolasi-terhadap-perubahan)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -867,3 +870,38 @@ Coba kita deskripsikan superdashboard:
 nah, kita bisa tahu bahwa ada kata *"dan"* di atas. Dengan begitu, kita bisa menyimpulkan bahwa superDashboard memiliki responsibility lebih dari satu, yang mana ini melanggar konsep ***Single Responsibility Principle*** (akan dibahas di bawah).
 
 ## Single Responsibility Principle
+Suatu class hanya boleh punya 1 alasan untuk berubah.
+
+Jika kelas kita memiliki lebih dari 1 responsibility, tentu hal ini akan membuat kelas kita memiliki lebih dari 1 hal untuk berubah. 
+
+Misal, kelas superDashboard tadi. Akan ada 2 alasan untuk berubah:
+1. Kelas akan berubah terkait dengan menu user
+2. Kelas akan berubah terkait dengan menu admin
+
+beberapa programmer mungkin berpendapat bahwa jika task sudah selesai, harus segera dideliver dan mengerjakan task selanjutnya. Kemudian, menganggap bahwa class yang kecil-kecil akan membuat bingung.
+
+Tapi, analoginya gini:
+
+kita pengen menyimpan semua perkakas kita ke dalam kotak peralatan dengan wadah-wadah kecil dan label yang jelas.
+
+Atau kita mau menyimpannya dalam kotak peralatan dengan sedikit wadah besar tanpa label.
+
+## Kohesi
+Kohesi maksudnya adalah method yang dimiliki oleh kelas sebisa mungkin menggunakan seluruh variable yang dideklarasikan dalam kelas (tidak harus semua variable, tapi jika bisa saja).
+
+Dengan begitu, kelas dan methodnya akan memiliki keterikatan yang kuat.
+
+Jika ada fungsi yang tidak terikat dengan kelas, lebih baik dipisahkan/buat fungsi sendiri.
+
+## Mengorganisir Perubahan
+Perubahan pasti terjadi. Kadang kita perlu merombak sebuah kelas untuk menerapkan perubahan.
+
+Namun, jika kelas kita secara logic sudah sesuai, kita tidak perlu menerapkan perubahan terlebih dahulu. Perubahan baru dirasa perlu jika ada perubahan dari segi bisnis atau logic.
+
+Usahakan menrapkan konsep Open-Closed Principle, dimana konsep itu artinya setiap kelas menerima improvisasi/pengembangan, tapi tidak menerima modifikasi.
+
+### Isolasi terhadap perubahan
+Hindari penggunaan kelas yang memiliki dependensi pada implementasi.
+Usahakan setiap kelas saling terhubung melalui *interface*. Ini akan memudahkan testing dan sekaligus menerapkan sebuah konsep design kelas yang bernama *Dependency Invesion Principle.*
+
+*Dependency Inversion Principle* adalah konsep dimana kelas kita hanya boleh saling ber-dependency melalui interface atau bukan pada implementasi konkrit suatu method.
