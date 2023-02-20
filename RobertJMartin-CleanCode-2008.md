@@ -104,6 +104,9 @@ A Handbook Of Agile Software Craftmanship
   - [Kohesi](#kohesi)
   - [Mengorganisir Perubahan](#mengorganisir-perubahan)
     - [Isolasi terhadap perubahan](#isolasi-terhadap-perubahan)
+- [System](#system)
+  - [Taruh di *main*](#taruh-di-main)
+  - [Factories](#factories)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -905,3 +908,16 @@ Hindari penggunaan kelas yang memiliki dependensi pada implementasi.
 Usahakan setiap kelas saling terhubung melalui *interface*. Ini akan memudahkan testing dan sekaligus menerapkan sebuah konsep design kelas yang bernama *Dependency Invesion Principle.*
 
 *Dependency Inversion Principle* adalah konsep dimana kelas kita hanya boleh saling ber-dependency melalui interface atau bukan pada implementasi konkrit suatu method.
+
+# System
+Membangun sebuah sistem seperti merancang sebuah kota. Bagaimana kota bisa terbentuk dan tetap ada? Hal itu karena kota memiliki perancangan/konstruksi. Kemudian, setelah kota berhasil dibangun, unit-unit kecillah yang menjaga segala fungsi dalam kota tetap berjalan. Hal itu terjadi juga pada pembangunan sebuah hotel bertingkat. Ketika dalam masa pembangunan, terdapat alat berat, mesin-mesin yang menata segala pondasi dan tembok bangunan. Tapi, setelah bangunan selesai dibuat, tidak ada lagi mesin-mesin besar. Yang ada adalah pelayan kamar, resepsionis, penjaga keamanan, dll.
+
+Begitu pula dengan membangun aplikasi. Sebuah aplikasi tentu memiliki bagian yang membangun semua fungsi terlebih dahulu, hal ini akan kita sebut *konstruktor*.
+
+Tentu bukanlah hal yang baik membiarkan fungsi yang membangun sebuah aplikasi bercampur dengan fungsi bisnis aplikasi kita. Ibarat, tentu kita tidak ingin melihat ada buldozer di dalam kamar hotel kita.
+
+## Taruh di *main*
+Letakkan semua konstruktor di fungsi main. Semua yang membangun aplikasi kita agar tetap berjala, letakkan di dalam main function.
+
+## Factories
+Function main lebih baik tidak langsung terhubung dengan sebuah implementasi. Kita bisa menerapkan konsep Abstract Factory, dimana terdapat abstract untuk fungsi bisnis dan ada factory untuk membuat objek yang berisikan fungsi abstract tersebut. Dengan begitu, kita bisa memisahkan proses konstruktor dalam *main* dan mengontrol logic bisnis.
