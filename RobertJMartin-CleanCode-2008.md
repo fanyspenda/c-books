@@ -107,6 +107,17 @@ A Handbook Of Agile Software Craftmanship
 - [System](#system)
   - [Taruh di *main*](#taruh-di-main)
   - [Factories](#factories)
+  - [Dependency Injection](#dependency-injection)
+- [Emergence](#emergence)
+  - [Simple Design Rule 1: Menjalankan semua test](#simple-design-rule-1-menjalankan-semua-test)
+  - [Simple Design Rule 2-4: Refactoring](#simple-design-rule-2-4-refactoring)
+    - [Tidak boleh ada duplikasi](#tidak-boleh-ada-duplikasi)
+    - [Expressive](#expressive)
+    - [Minimalisir jumlah class dan method](#minimalisir-jumlah-class-dan-method)
+- [Concurrency](#concurrency)
+  - [Kenapa Concurrency?](#kenapa-concurrency)
+  - [Mitos dan Miskonsepsi](#mitos-dan-miskonsepsi)
+  - [Tantangan penggunaan concurrency](#tantangan-penggunaan-concurrency)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -921,3 +932,81 @@ Letakkan semua konstruktor di fungsi main. Semua yang membangun aplikasi kita ag
 
 ## Factories
 Function main lebih baik tidak langsung terhubung dengan sebuah implementasi. Kita bisa menerapkan konsep Abstract Factory, dimana terdapat abstract untuk fungsi bisnis dan ada factory untuk membuat objek yang berisikan fungsi abstract tersebut. Dengan begitu, kita bisa memisahkan proses konstruktor dalam *main* dan mengontrol logic bisnis.
+
+## Dependency Injection
+Hal ini sebenarnya sudah diterapkan dalam clean architechture, dimana kita membuat sebuah package yang terpisah, misal antara logic bisnis dan management data.
+
+Dengan terpisahnya beberapa hal tersebut akan membuat kode kita menjadi lebih testable
+
+# Emergence
+Menurut Kent Beck, ada design yang bernama Simple Design yang memiliki 4 aturan berikut:
+1. Menjalankan semua test
+2. Tidak ada duplikasi
+3. Menjelaskan maksud dari programmer
+4. Meminimalisir jumlah class dan method
+
+Secara berurutan, peraturan di atas ditulis dari yang terpenting hingga yang paling ttidak penting.
+
+## Simple Design Rule 1: Menjalankan semua test
+Artinya, kode kita harus *testable* dan semua test yang kita buat harus berjalan dengan baik.
+
+Tidak ada test atau gagal menjalankan test, artinya sistem belum terverifikasi, dan sistem yang belum terverifikasi sebaiknya tidak dideploy ke production.
+
+## Simple Design Rule 2-4: Refactoring
+Unit testing harusnya menghilangkan rasa takut ketika kita melakukan refactoring.
+
+### Tidak boleh ada duplikasi
+Duplikasi dapat menimbulkan masalah dan menambah pekerjaan. Misal: ketika ada bug dalam kode duplikasi kita, kita harus membenahi semua kode duplikasi kita karena mereka harusnya juga ngebug.
+
+### Expressive
+Usahakan kode kita mudah dipahami oleh orang lain, karena project kita itu long-term maintenance.
+
+Jadi expressive bisa dengan cara memberi penamaan yang baik, membuat function lebih kecil, atau menggunakan standard tata nama.
+
+Unit test yang jelas juga bisa termasuk ekspresif.
+
+### Minimalisir jumlah class dan method
+Biasanya, karena kita ingin selalu membuat function kita lebih kecil, akhirnya muncul banyak kelas dan method. Aturan ini untuk membatasi kita dalam membuat class dan method juga (intinya, jangan berlebihan!).
+
+Ingat, aturan ini adalah aturan yang paling rendah. Jadi, yang terpenting adalah *semua test jalan, tidak ada duplikasi dan expresif*.
+
+# Concurrency
+Concurrency memisahkan antara apa yang harus diselesaikan dan kapan harus diselesaikan.
+
+## Kenapa Concurrency?
+Kita bisa menerapkan multithread /concurrency jika:
+- Data yang dikelola banyak dan user butuh response cepat.
+- Sistem bisa memberi response setelah pemrosesan yang berat selesai dilakukan.
+
+## Mitos dan Miskonsepsi
+- Concurrency meningkatkan performa
+  
+  Concurrency hanya meningkatkan performa jika ada waktu yang bisa dishare ke process lain secara bersamaan. 
+  
+  Misal, ngerebus mie ***sambil*** nyiapin bumbu itu lebih cepet dibanding ngerebus mie, ***baru*** nyiapin bumbu (Karena ngerebus mie itu lama, bisa sampe 3 menit).
+- Design nggk berubah ketika menggunakan concurrency
+  
+  Design ikut berubah karena secara algoritma juga berubah. Design kode procedural (berurutan) itu berbeda dengan design kode concurrency.
+
+
+Hal yang perlu diingat tentang Concurrency:
+1. Concurrency menimbulkan beberapa hal. Baik secara performance dan kode yang kita tulis.
+2. Concurrency itu complex, bahkan untuk masalah yg simple.
+3. Cuncurrency bug itu kadang muncul, kadang nggk. 
+4. Concurrency kadang memunculkan perubahan ke design sistem.
+
+## Tantangan penggunaan concurrency
+Tantangannya adalah concurrencynya balapan. Misal kita ada 2 thread menjalankan function `tambahAngka()` berikut:
+```Go
+var angka = 20
+func tambahAngka() {
+    angka++
+}
+```
+
+Ada 3 kemungkinan yang bisa terjadi:
+- thread 1 = 21 --> thread 2 = 22 --> Angka = 22
+- thread 2 = 21 --> thread 1 = 22 --> Angka = 22
+- thread 1 = 21 --> thread 2 = 21 --> Angka = 21
+
+hasil yang ketiga adalah hasil yang tidak kita inginkan. Hal ini terjadi karena ada banyak jalan yang bisa dilalui concurrency. Tantangannya adalah, *bagaimana membuat concurrency melalui jalan yang kita inginkan*.
