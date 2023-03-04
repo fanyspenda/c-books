@@ -118,6 +118,13 @@ A Handbook Of Agile Software Craftmanship
   - [Kenapa Concurrency?](#kenapa-concurrency)
   - [Mitos dan Miskonsepsi](#mitos-dan-miskonsepsi)
   - [Tantangan penggunaan concurrency](#tantangan-penggunaan-concurrency)
+  - [Prinsip Yang Bisa Melindungi Kode Kalian](#prinsip-yang-bisa-melindungi-kode-kalian)
+    - [SRP (Single Responsibility Principle)](#srp-single-responsibility-principle)
+    - [Corollary: Batasi Scope Data](#corollary-batasi-scope-data)
+    - [Corollary: Copy Data](#corollary-copy-data)
+    - [Corollary: Thread Harus Seindependen Mungkin](#corollary-thread-harus-seindependen-mungkin)
+  - [Kenali Librarymu](#kenali-librarymu)
+  - [Kenali Model Ekesekusi Concurrencymu](#kenali-model-ekesekusi-concurrencymu)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -1010,3 +1017,35 @@ Ada 3 kemungkinan yang bisa terjadi:
 - thread 1 = 21 --> thread 2 = 21 --> Angka = 21
 
 hasil yang ketiga adalah hasil yang tidak kita inginkan. Hal ini terjadi karena ada banyak jalan yang bisa dilalui concurrency. Tantangannya adalah, *bagaimana membuat concurrency melalui jalan yang kita inginkan*.
+
+## Prinsip Yang Bisa Melindungi Kode Kalian
+### SRP (Single Responsibility Principle)
+Dengan SRP, kita bisa memastikan setiap function memiliki 1 tujuan. Pertimbangan dengan concurrency adalah:
+1. Concurrency punya life-cyclenya sendiri. Ia berubah dan dimaintenance dengan cara berbeda dari non-concurrency code.
+2. Concurrency memiliki challenges tersendiri. Artinya, concurrency mempunyai solusi tersendiri dan tidak bisa disamakan dengan non-concurrency code.
+3. Masalah yang ditimbulkan dari penulisan concurrency yang tidak baik saja sudah membuat pusing. Jangan ditambah dengan kode lain yang tidak berhubungan dengan concurrencynya.
+
+Jadi, pisahkan kode concurrency dengan kode lain.
+
+### Corollary: Batasi Scope Data
+Tidak jarang concurrency menggunakan shared object. Usahakan batasi jumlah section yang mengakses object tersebut. Semakin banyak section yang mengakses object tersebut, maka:
+1. Kita bisa lupa untuk memprotect object tersebut, menyebabkan error, atau mungkin bug yang tidak terdeteksi.
+2. Karena ada banyak section, kita perlu memastikan bahwa kita memprotect shared object di setiap section. Hal ini melanggar prinsip DRY (Dont Repeat Yourself).
+3. Semakin besar scope yang mengakses shared object, semakin sulit bug untuk dideteksi.
+
+### Corollary: Copy Data
+Cara terbaik untuk menghindari masalah yang disebabkan oleh shared data adalah tidak menerapkannya. Kadang ada beberapa case dimana kita bisa menggunakan copy dari object/data, daripada membuat data tersebut menjadi *shared object*.
+
+### Corollary: Thread Harus Seindependen Mungkin
+Thread yang tidak memiliki shared object, hanya menggunakan local variable, hal ini sangat direkomendasikan karena dapat menghindari masalah yang disebabkan synchronization di atas.
+
+## Kenali Librarymu
+Disini menjelaskan soal library dari Java. Jadi, skip ya hehe.. :pray:
+
+## Kenali Model Ekesekusi Concurrencymu
+Ada beberapa definisi dalam concurrency yang perlu kita ketahui:
+1. **Bound Resource:** Resource yang sudah fixed dan digunakan di environment yang berjalan secara concurrent. Contoh: Koneksi DB.
+2. **Mutual Exclusion:** Hanya 1 thread yang bisa akses shared data source dalam 1 waktu.
+3. **Starvation:** 1 atau lebih thread dilarang untuk menjalankan proses yang terlalu lama atau berjalan selamanya. Contoh: ada 2 thread, thread 1 berjalan sangat cepat tapi tidak berhenti. Sedangkan thread 2 berjalan lambat. Maka, thread 1 akan membuat thread 2 tidak akan berjalan.
+4. **Deadlock:** Dua atau lebih thread saling menunggu untuk selesai. Misal thread A menunggu proses thread B selesai, baru bisa selesai. Sedangkan thread B menunggu proses thread A selesai, baru bisa selesai. Hal ini akan menyebabkan **Deadlock**.
+5. **Livelock:** Thread berjalan, tapi di tengah jalan, dia gagal. Akhirnya, mengulang proses thread dari awal. Hal ini berjalan terus-menerus, bahkan selamanya. Contoh pada konsep producer-consumer. Dimana consumer gagal memroses pesan dan pesan dikirim kembali ke queue, lalu diterima lagi oleh consumer hanya untuk kembali gagal dan dikirim kembali ke queue.
