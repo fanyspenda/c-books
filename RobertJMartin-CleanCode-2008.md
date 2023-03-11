@@ -125,6 +125,10 @@ A Handbook Of Agile Software Craftmanship
     - [Corollary: Thread Harus Seindependen Mungkin](#corollary-thread-harus-seindependen-mungkin)
   - [Kenali Librarymu](#kenali-librarymu)
   - [Kenali Model Ekesekusi Concurrencymu](#kenali-model-ekesekusi-concurrencymu)
+    - [Producer-Consumer](#producer-consumer)
+    - [Readers-Writers](#readers-writers)
+    - [Dining Philosopher](#dining-philosopher)
+  - [Jaga agar Sinkronisasi Tetap Kecil](#jaga-agar-sinkronisasi-tetap-kecil)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -1043,9 +1047,31 @@ Thread yang tidak memiliki shared object, hanya menggunakan local variable, hal 
 Disini menjelaskan soal library dari Java. Jadi, skip ya hehe.. :pray:
 
 ## Kenali Model Ekesekusi Concurrencymu
-Ada beberapa definisi dalam concurrency yang perlu kita ketahui:
+Ada beberapa model/cara kerja concurrency. Tapi sebelum ke sana, Ada beberapa definisi dalam concurrency yang perlu kita ketahui:
 1. **Bound Resource:** Resource yang sudah fixed dan digunakan di environment yang berjalan secara concurrent. Contoh: Koneksi DB.
 2. **Mutual Exclusion:** Hanya 1 thread yang bisa akses shared data source dalam 1 waktu.
 3. **Starvation:** 1 atau lebih thread dilarang untuk menjalankan proses yang terlalu lama atau berjalan selamanya. Contoh: ada 2 thread, thread 1 berjalan sangat cepat tapi tidak berhenti. Sedangkan thread 2 berjalan lambat. Maka, thread 1 akan membuat thread 2 tidak akan berjalan.
 4. **Deadlock:** Dua atau lebih thread saling menunggu untuk selesai. Misal thread A menunggu proses thread B selesai, baru bisa selesai. Sedangkan thread B menunggu proses thread A selesai, baru bisa selesai. Hal ini akan menyebabkan **Deadlock**.
 5. **Livelock:** Thread berjalan, tapi di tengah jalan, dia gagal. Akhirnya, mengulang proses thread dari awal. Hal ini berjalan terus-menerus, bahkan selamanya. Contoh pada konsep producer-consumer. Dimana consumer gagal memroses pesan dan pesan dikirim kembali ke queue, lalu diterima lagi oleh consumer hanya untuk kembali gagal dan dikirim kembali ke queue.
+
+setelah memahami hal di atas, kita bisa lanjut ke bawah.
+
+### Producer-Consumer
+Producer thread mengirim data ke dalam sebuah antrian (*queue*). Consumer thread mengambil data dari queue. 
+
+Producer tidak akan mengirim queue baru jika queue penuh, consumer tidak akan mengambil data dari queue jika queue kosong.
+
+keduanya saling mengirim sinyal. Producer mengirim sinyal bahwa queue tidak lagi kosong, sehingga consumer bisa memulai mengambil data dari queue. Consumer mengirim sinyal bahwa queue tidak lagi penuh, sehingga producer bisa lanjut mengirim data.
+
+### Readers-Writers
+Misal ada shared resources yang diakses oleh 2 thread, writers yang bertugas mengupdate shared resources dan readers yang mengambil data shared resources.
+
+Tantangan dalam model ini adalah kapan kita harus mengupdate dan kapan kita harus membaca data. Terlalu sering update akan membuat reader selalu menunggu, karena shared resource sedang diakses writer. Terlalu sering dibaca, membuat writer tidak bisa mengakses shared resource, karena data sedang digunakan oleh thread readers.
+
+### Dining Philosopher
+Bayangkan beberapa orang filosof duduk dalam meja bundar. Para filosof akan selalu berpikir, kecuali ketika mereka lapar. Di tengah meja bundar terdapat sebuah mangkuk mie besar. Setiap filosof memiliki 1 batang sumpit yang diletakkan di sebelah kiri mereka. Seorang filosof tidak akan bisa makan kecuali mereka menggunakan 2 sumpit yang ada di kanan dan kiri mereka. Jika sumpit di kanan/kiri mereka sedang dipakai oleh filosof lain, maka dia harus menunggu sampai filosof lain itu selesai menggunakan sumpit tersebut.
+
+Sekarang, ganti filosof dengan thread dan ganti sumpit dengan resource, maka hal ini sama dengan permasalahan yang dihadapi oleh aplikasi enterprise yang mana beberapa process saling berkompetisi memperebutkan resource. Hal ini jika tidak didesign dengan baik, akan menyebabkan berbagai masalah concurrency seperti deadlock, livelock, throughput, dan penurunan efisiensi.
+
+## Jaga agar Sinkronisasi Tetap Kecil
+Kalo di Golang, bisanya menggunakan mutex Lock atau semacamnya. Mutex Lock memastikan bahwa hanya ada 1 thread yang mengakses data di dalam code yang di-*lock*. Biasanya hal ini dilakukan ketika kita melakukan proses yang kritikal. *Locking* ini jelas menurunkan performa concurrency. Jadi, pastikan sedikit kode kritikal dalam *lock* yang kita buat.
