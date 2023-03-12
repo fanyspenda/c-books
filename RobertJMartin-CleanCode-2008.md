@@ -129,6 +129,8 @@ A Handbook Of Agile Software Craftmanship
     - [Readers-Writers](#readers-writers)
     - [Dining Philosopher](#dining-philosopher)
   - [Jaga agar Sinkronisasi Tetap Kecil](#jaga-agar-sinkronisasi-tetap-kecil)
+  - [Membuat kode shut-down itu tidak mudah](#membuat-kode-shut-down-itu-tidak-mudah)
+  - [Testing Threaded Code](#testing-threaded-code)
 # Penamaan
 Kode yang baik adalah kode yang memiliki penamaan variable/fungsi yang baik juga.
 ## Berikan nama yang sesuai/berarti
@@ -1075,3 +1077,20 @@ Sekarang, ganti filosof dengan thread dan ganti sumpit dengan resource, maka hal
 
 ## Jaga agar Sinkronisasi Tetap Kecil
 Kalo di Golang, bisanya menggunakan mutex Lock atau semacamnya. Mutex Lock memastikan bahwa hanya ada 1 thread yang mengakses data di dalam code yang di-*lock*. Biasanya hal ini dilakukan ketika kita melakukan proses yang kritikal. *Locking* ini jelas menurunkan performa concurrency. Jadi, pastikan sedikit kode kritikal dalam *lock* yang kita buat.
+
+## Membuat kode shut-down itu tidak mudah
+Membuat kode yang harus tetap jalan itu berbeda dengan membuat kode yang jalan untuk beberapa saat, lalu di-*shutdown*.
+
+Bayangkan sebuah parent thread yang memiliki beberapa child threads dan parent thread menunggu semua child thread selesai berjalan sebelum melakukan graceful shutdown. Bagaimana jika salahsatu child thread mati? Parent thread akan terus menunggu return value child thread tersebut dan graceful shutdown tidak akan terjadi.
+
+Jadi, jika kita perlu untuk membuat kode concurrency yang terdapat graceful shutdown di dalamnya, luangkan waktu lebih banyak untuk membuat shutdown sistem selalu terjadi dengan benar.
+
+## Testing Threaded Code
+Membuktikan bahwa kode yang kita tulis itu benar = tidak berguna. Testing tidak membuktikan bahwa kode kita benar, tapi meminimalisir risiko. Hal ini benar dalam kode single-threaded. Ketika berurusan dengan kode multi-threaded, semua menjadi lebih kompleks dari sebelumnya.
+
+Tips membuat threaded code
+1. Anggap Error yang jarang terjadi sebagai masalah (Jangan dibiarkan). 
+2. Pastikan Kode non-threading bekerja lebih dulu. Jangan mencari bug di kode yang tidak pake threading dan pakai threading secara bersamaan.
+3. Buat kode threading kalian bisa diatur sehingga ia bisa berjalan sesuai konfigurasi. Misal berjalan di 1 thread, beberapa thread, berjalan secara lambat, cepat, dll.
+4. Jalankan kode dalam beberapa environment. Bisa jadi di Windows berhasil, tapi di OS X dia gagal.
+5. Jalankan kode agar gagal/mengatur bagian mana yang harus jalan dahulu. Bisa secara manual dengan memberi `sleep()`, atau secara automated menggunakan tools/library.
